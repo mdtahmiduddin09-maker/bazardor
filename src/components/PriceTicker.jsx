@@ -6,18 +6,23 @@ export default function PriceTicker({ products }) {
   if (!products || products.length === 0) return null;
 
   return (
-    <div className="bg-gray-50 border-b border-gray-200 py-2">
-      <Marquee pauseOnHover={true} speed={40} gradient={false}>
-        {products.map((item, index) => (
-          <div key={index} className="inline-flex items-center gap-2 text-xs font-medium text-gray-700 mx-6">
-            <span>{item.icon || "🛒"}</span>
-            <span>{item.name}</span>
-            <span>{toBn(item.price)} টাকা/{item.unit?.replace("প্রতি ", "") || "কেজি"}</span>
-            <span className={item.change > 0 ? "text-red-500" : item.change < 0 ? "text-green-600" : "text-gray-400"}>
-              {item.change > 0 ? "▲" : item.change < 0 ? "▼" : "—"} {toBn(Math.abs(item.change || 0))}%
+    <div className="bg-white border border-gray-200 rounded-xl py-2 px-3">
+      <Marquee pauseOnHover speed={45}>
+        {products.map((p) => {
+          const pct = p.change?.pct || 0;
+          const isUp = pct > 0;
+          const isDown = pct < 0;
+          return (
+            <span key={p.id} className="mx-4 text-xs flex items-center gap-1.5">
+              <span>{p.image}</span>
+              <span className="font-semibold text-gray-800">{p.nameBn}:</span>
+              <span className="font-bold text-green-800">{toBn(p.today)}৳</span>
+              <span className={isUp ? "text-red-600" : isDown ? "text-green-600" : "text-gray-400"}>
+                ({isUp ? "▲" : isDown ? "▼" : "—"} {toBn(Math.abs(pct))}%)
+              </span>
             </span>
-          </div>
-        ))}
+          );
+        })}
       </Marquee>
     </div>
   );
