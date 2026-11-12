@@ -7,6 +7,11 @@ const db = client.db();
 
 export const auth = betterAuth({
   database: mongodbAdapter(db, { client }),
+  baseURL: process.env.BETTER_AUTH_URL,
+  trustedOrigins: [
+    "http://localhost:3000",
+    "https://bazardor-bay.vercel.app",
+  ],
   emailAndPassword: {
     enabled: true,
   },
